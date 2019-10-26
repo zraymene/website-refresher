@@ -2,11 +2,20 @@
   "name": "website-refresher",
   "version": "0.1",
   "manifest_version": 2,
+  "background": {
+    "scripts": [
+      "js/background.js"
+    ],
+    "persistent": false
+  },
   "browser_action": {
       "default_icon": "Res/icon.png",
       "default_popup": "popup.html"
     },
   "permissions": [
-        "storage"
+        "storage",
+        "tabs"
    ]
+
+
 }
