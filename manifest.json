@@ -1,0 +1,12 @@
+{
+  "name": "website-refresher",
+  "version": "0.1",
+  "manifest_version": 2,
+  "browser_action": {
+      "default_icon": "Res/icon.png",
+      "default_popup": "popup.html"
+    },
+  "permissions": [
+        "storage"
+   ]
+}
