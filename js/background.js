@@ -1,3 +1,27 @@
+var intervalFnc = null;
+
+function BEGIN_TASK(msg) {
+
+  console.log("Starting auto-refresher for TAB:" + msg.TAB.title);
+
+  intervalFnc = setInterval(function(){
+
+    chrome.tabs.reload(msg.TAB.id);
+
+  }, msg.INTERVAL * 1000);
+
+
+
+}
+
+function END_TASK(msg) {
+
+  console.log("Stoping auto-refresher for TAB:" + msg.TAB.title);
+
+  clearInterval(intervalFnc);
+
+}
+
 chrome.extension.onConnect.addListener(function(port) {
 
       console.log("Connected .....");
@@ -13,17 +37,24 @@ chrome.extension.onConnect.addListener(function(port) {
       port.onMessage.addListener(function(msg) {
         /*   console.log(msg);
            chrome.tabs.reload(msg.TAB.id);      // RELOAD TAB
-           setInterval(function(){ chrome.tabs.reload(msg.TAB.id); }, msg.INTERVAL * 1000); 
+           setInterval(function(){ chrome.tabs.reload(msg.TAB.id); }, msg.INTERVAL * 1000);
           */
            switch (msg.ACTION) {
+
              case "START":
-                  console.log("Starting auto-refresher for TAB:" + msg.TAB.title);
+
+                  BEGIN_TASK(msg);
+
                break;
+
              case "STOP":
-                  console.log("Stoping auto-refresher for TAB:" + msg.TAB.title);
+
+                    END_TASK(msg);
+
                break;
+
            }
 
       });
 
- })
+ });

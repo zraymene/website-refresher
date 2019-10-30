@@ -2,6 +2,8 @@ var port = chrome.extension.connect({
       name: "SC"
  });
 
+ var currentTabMsg ;
+
 
  /*      -----------      RECIVING MESSAGE SAMPLE     ----------------
 
@@ -20,14 +22,14 @@ $(document).ready(function(){
 
     chrome.tabs.getSelected(null, function(tab) {
 
-      $("#test").html(tab.id);
-
-      port.postMessage({
+      currentTabMsg = {
         TAB : tab,
         ACTION : "START",
-        INTERVAL : 1,
-        ERROR_TYPE : 0
-      });
+        INTERVAL : $('#interval').val(),
+        ERROR_TYPE : $('#error_type').val()
+      };
+
+      port.postMessage(currentTabMsg);
 
     });
 
@@ -39,8 +41,18 @@ $(document).ready(function(){
 
     chrome.browserAction.setBadgeBackgroundColor({color: '#444444'});
 
+    currentTabMsg.ACTION = "STOP";
+
+    port.postMessage(currentTabMsg);
   });
 
+  // ############ MAKE SURE ONLY ONE VALUE IS SET , CAN BE DELETED LATER ######################
+  $( "#interval" ).change(function() {
+    $("#error_type").val("NULL");
+  });
 
+  $( "#error_type" ).change(function() {
+    $("#interval").val(0);
+  });
 
 });

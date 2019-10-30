@@ -6,9 +6,56 @@
     <title></title>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/popup.js"></script>
+    <style>
+
+    body {
+      width: 150px;
+      text-align: center;
+      background-color: #e3e3e3;
+      font-weight: bold;
+    }
+
+      #interval, #error_type{
+        width: 65%;
+        text-align: center;
+        border-radius: 5px;
+      }
+
+      #start, #stop {
+         transition-duration: .2s;
+         margin-top: 2px;
+      	 border: none;
+      	 font-size: 20px;
+      	 color: #fafafa;
+      	 background-color: #242424;
+      }
+
+      #start:hover, #stop:hover  {
+      	background-color: #a3a3a3;
+      	color: #242424;
+      }
+
+      #title {
+        background-color: #3d3d3d;
+        color: white;
+        font-size: 20px;
+        padding: 5px 0 ;
+      }
+
+    </style>
   </head>
   <body>
-    <div id="test"></div> 
+    <div id="title" >Auto Refresher</div>
+    <div id="current-state"></div>
+    <div id="interval-label"> Interval (seconds) : </div>
+    <input id="interval" type="number" value="1"> </br>
+    Or </br>
+    <select id ="error_type">
+      <option value="NULL">NULL</option>
+      <option value="ERR_CONNECTION_RESET">ERR_CONNECTION_RESET</option>
+      <option value="ERR_INTERNET_DISCONNECTED">ERR_INTERNET_DISCONNECTED</option>
+      <option value="ERR_CONNECTION_REFUSED">ERR_CONNECTION_REFUSED</option>
+    </select>
     <button id="start"> Start </button>
     <button id="stop" > Stop </button>
   </body>
