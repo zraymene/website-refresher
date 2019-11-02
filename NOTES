@@ -2,14 +2,24 @@ TASKS:
 
   # Figure out connection between background and popup and content  #DONE
   # Fix high CPU usage and Add content.js to get error type from html (with JQuery) (FIXED)
-  # Add Case handling ( Stop older tab task after starting in an other tab)
-
+  # Add Case handling ( Stop older tab task after starting in an other tab) #DONE
+  # Fix the bug where soetimes can't change action  value on stopping
+  # Add checking for web is fully loaded to refresh again
 STRUCTURES:
+  # STATE MESSAGE :
+    {
+      TYPE,
+      MSG
+    }
+  # Types :
+    • NOTIFY  (Green color)
+    • ERROR   (Red color)
 
   # MESSAGE OBJECT POPUP-TO-BACKGROUND :
       {
         TAB,         // TAB Object
         ACTION,      // Action type
+        TIME,        // Repeat N time ( 0 infinite )
         INTERVAL,    // (Optional) Interval (sec) between a refresh and another (Must be 0 if ERROR_TYPE is set and vise-versa)
         ERROR_TYPE,  // (Optional) Refresh if Error of type ERROR_TYPE occur (Must be null if INTERVAL is set and vise-versa)
       }

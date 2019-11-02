@@ -1,12 +1,34 @@
 var intervalFnc = null;
+var currentMsg = null;
+var repeatCounter = 0;
 
-function BEGIN_TASK(msg) {
+function BEGIN_TASK(msg , port) {
 
   console.log("Starting auto-refresher for TAB:" + msg.TAB.title);
 
   intervalFnc = setInterval(function(){
 
-    chrome.tabs.reload(msg.TAB.id);
+    if(currentMsg.TIME == 0 )
+
+      chrome.tabs.reload(msg.TAB.id);
+
+    else if(currentMsg.TIME){
+
+      if(repeatCounter <= 0){
+
+        END_TASK(msg , port);
+
+      }
+      else {
+
+        chrome.tabs.reload(msg.TAB.id);
+
+        repeatCounter -= 1;
+
+        console.log(repeatCounter);
+
+      }
+    }
 
   }, msg.INTERVAL * 1000);
 
@@ -14,12 +36,19 @@ function BEGIN_TASK(msg) {
 
 }
 
-function END_TASK(msg) {
+function END_TASK(msg , port) {
 
   console.log("Stoping auto-refresher for TAB:" + msg.TAB.title);
 
   clearInterval(intervalFnc);
 
+  currentMsg = null;
+
+  port.postMessage({
+    TYPE : "NOTIFY",
+    MSG  : "Stoping auto-refresher !",
+    STATE : "IDLE"
+  });
 }
 
 chrome.extension.onConnect.addListener(function(port) {
@@ -42,14 +71,33 @@ chrome.extension.onConnect.addListener(function(port) {
            switch (msg.ACTION) {
 
              case "START":
+                  if(currentMsg == null){
 
-                  BEGIN_TASK(msg);
+                    repeatCounter = msg.TIME;
 
+                    currentMsg = msg;
+
+                    port.postMessage({
+                      TYPE : "NOTIFY",
+                      MSG  : "This tab will begin refreshing !",
+                      STATE : "WORKING"
+                    });
+
+                    BEGIN_TASK(msg , port);
+
+
+                  }else {
+                    port.postMessage({
+                      TYPE : "ERROR",
+                      MSG  : "The selected tab is already on work Or multi-tab feutere isn't done yet ",
+                      STATE : "IDLE"
+                    });
+                  }
                break;
 
              case "STOP":
 
-                    END_TASK(msg);
+                    END_TASK(msg , port);
 
                break;
 

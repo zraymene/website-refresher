@@ -16,15 +16,12 @@ $(document).ready(function(){
 
   $("#start").click(function() {
 
-    chrome.browserAction.setBadgeText({text: 'ON'});
-
-    chrome.browserAction.setBadgeBackgroundColor({color: '#4688F1'});
-
     chrome.tabs.getSelected(null, function(tab) {
 
       currentTabMsg = {
         TAB : tab,
         ACTION : "START",
+        TIME : $('#repeat').val(),
         INTERVAL : $('#interval').val(),
         ERROR_TYPE : $('#error_type').val()
       };
@@ -37,9 +34,6 @@ $(document).ready(function(){
 
   $("#stop").click(function() {
 
-    chrome.browserAction.setBadgeText({text: 'IDLE'});
-
-    chrome.browserAction.setBadgeBackgroundColor({color: '#444444'});
 
     currentTabMsg.ACTION = "STOP";
 
@@ -55,4 +49,48 @@ $(document).ready(function(){
     $("#interval").val(0);
   });
 
+});
+
+function ON(){
+
+  chrome.browserAction.setBadgeText({text: 'ON'});
+
+  chrome.browserAction.setBadgeBackgroundColor({color: '#4688F1'});
+
+}
+
+function OFF() {
+
+  chrome.browserAction.setBadgeText({text: 'IDLE'});
+
+  chrome.browserAction.setBadgeBackgroundColor({color: '#444444'});
+}
+
+port.onMessage.addListener(function(msg) {
+
+     switch (msg.TYPE) {
+       case "NOTIFY":
+
+         $("#notify").text(msg.MSG);
+
+         break;
+       case "ERROR":
+
+          $("#error").text(msg.MSG);
+
+         break;
+     }
+
+     switch (msg.STATE) {
+       case "WORKING":
+
+         ON();
+
+         break;
+       case "IDLE":
+
+          OFF();
+
+         break;
+     }
 });

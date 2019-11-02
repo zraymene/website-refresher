@@ -13,9 +13,10 @@
       text-align: center;
       background-color: #e3e3e3;
       font-weight: bold;
+      word-wrap: break-word;
     }
 
-      #interval, #error_type{
+      #interval, #error_type, #repeat{
         width: 65%;
         text-align: center;
         border-radius: 5px;
@@ -42,11 +43,22 @@
         padding: 5px 0 ;
       }
 
+      #error {
+        margin-top: 2px;
+        color: red;
+      }
+
+      #notify {
+        color: green;
+      }
+
     </style>
   </head>
   <body>
     <div id="title" >Auto Refresher</div>
     <div id="current-state"></div>
+    <div id="repeat-label"> Number of repeats : </div>
+    <input id="repeat" type="number" value="0"> </br>
     <div id="interval-label"> Interval (seconds) : </div>
     <input id="interval" type="number" value="1"> </br>
     Or </br>
@@ -58,5 +70,7 @@
     </select>
     <button id="start"> Start </button>
     <button id="stop" > Stop </button>
+    <div id="error"></div>
+    <div id="notify"></div>
   </body>
 </html>
