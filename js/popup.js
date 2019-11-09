@@ -12,18 +12,44 @@ var port = chrome.extension.connect({
  });
 */
 
+/*chrome.tabs.getSelected(null, function(tab) {
+
+  chrome.tabs.executeScript(tab.id, {
+    "content.js"
+  }, _=>{
+
+    let e = chrome.runtime.lastError;
+
+    if(e !== undefined){
+
+      console.log(tabId, _, e);
+
+    }});
+
+
+});
+*/
+
+
+
 $(document).ready(function(){
 
   $("#start").click(function() {
 
     chrome.tabs.getSelected(null, function(tab) {
+      var checkBox = null;
+
+      if ($('#error_type').is(":checked"))
+      {
+          checkBox = "on";
+      }
 
       currentTabMsg = {
         TAB : tab,
         ACTION : "START",
         TIME : $('#repeat').val(),
         INTERVAL : $('#interval').val(),
-        ERROR_TYPE : $('#error_type').val()
+        ERROR_TYPE : checkBox
       };
 
       port.postMessage(currentTabMsg);
@@ -47,6 +73,7 @@ $(document).ready(function(){
 
   $( "#error_type" ).change(function() {
     $("#interval").val(0);
+    $("#repeat").val(0);
   });
 
 });

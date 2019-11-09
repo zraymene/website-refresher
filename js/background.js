@@ -1,10 +1,80 @@
 var intervalFnc = null;
 var currentMsg = null;
 var repeatCounter = 0;
+var counter = 0;
+var tabStatus  ;
+
+chrome.tabs.onUpdated.addListener(function (tabId , info) {
+
+  if(currentMsg != null){
+    if(tabId == currentMsg.TAB.id){
+        tabStatus = info.status;
+    }
+  }
+
+});
 
 function BEGIN_TASK(msg , port) {
 
   console.log("Starting auto-refresher for TAB:" + msg.TAB.title);
+
+  if(currentMsg.ERROR_TYPE != null){
+
+    intervalFnc = setInterval(function(){
+
+      chrome.tabs.executeScript(msg.TAB.id, { file: "js/baitScript.js" }, result => {
+
+        const lastErr = chrome.runtime.lastError;
+
+        if (lastErr ){
+          if(tabStatus == "complete"){
+            
+            counter += 1;
+
+            console.log("Number of repetetion : " + counter );
+
+            chrome.tabs.reload(msg.TAB.id);
+          }
+
+         }else {
+
+           counter = 0;
+
+           END_TASK(msg , port);
+
+         }
+
+      });
+
+
+    }, 500);
+
+  }
+  else if(currentMsg.TIME != 0 && currentMsg.INTERVAL == 0){
+
+    intervalFnc = setInterval(function(){
+
+      if(tabStatus == "complete"){
+
+        if(repeatCounter <= 0){
+
+          END_TASK(msg , port);
+
+        }
+        else {
+
+          chrome.tabs.reload(msg.TAB.id);
+
+          repeatCounter -= 1;
+
+          tabStatus = "nothing";
+
+        }
+
+      }
+    }, 1000);
+
+  }else {
 
   intervalFnc = setInterval(function(){
 
@@ -12,7 +82,7 @@ function BEGIN_TASK(msg , port) {
 
       chrome.tabs.reload(msg.TAB.id);
 
-    else if(currentMsg.TIME){
+    else {
 
       if(repeatCounter <= 0){
 
@@ -32,6 +102,7 @@ function BEGIN_TASK(msg , port) {
 
   }, msg.INTERVAL * 1000);
 
+  }
 
 
 }
@@ -71,6 +142,15 @@ chrome.extension.onConnect.addListener(function(port) {
            switch (msg.ACTION) {
 
              case "START":
+
+
+
+          /*   chrome.webNavigation.onErrorOccurred.addListener(function(callback) {
+               console.log(callback.error);
+             });
+             */
+
+
                   if(currentMsg == null){
 
                     repeatCounter = msg.TIME;
