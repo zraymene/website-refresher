@@ -4,7 +4,7 @@ TASKS:
   # Fix high CPU usage and Add content.js to get error type from html (with JQuery) (FIXED)
   # Add Case handling ( Stop older tab task after starting in an other tab) #DONE
   # Add checking for web is fully loaded to refresh again #DONE
-  # Fix stopping task when re-open pop-up page ( )
+  # Fix stopping task when re-open pop-up page ( ) #FIXED
 
 STRUCTURES:
   # STATE MESSAGE :

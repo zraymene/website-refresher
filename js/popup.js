@@ -60,10 +60,7 @@ $(document).ready(function(){
 
   $("#stop").click(function() {
 
-
-    currentTabMsg.ACTION = "STOP";
-
-    port.postMessage(currentTabMsg);
+    port.postMessage({ACTION:"STOP"});
   });
 
   // ############ MAKE SURE ONLY ONE VALUE IS SET , CAN BE DELETED LATER ######################

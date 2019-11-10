@@ -28,7 +28,7 @@ function BEGIN_TASK(msg , port) {
 
         if (lastErr ){
           if(tabStatus == "complete"){
-            
+
             counter += 1;
 
             console.log("Number of repetetion : " + counter );
@@ -109,7 +109,7 @@ function BEGIN_TASK(msg , port) {
 
 function END_TASK(msg , port) {
 
-  console.log("Stoping auto-refresher for TAB:" + msg.TAB.title);
+  console.log("Stoping auto-refresher for TAB:" + currentMsg.TAB.title);
 
   clearInterval(intervalFnc);
 
