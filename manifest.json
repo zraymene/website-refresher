@@ -4,6 +4,12 @@
 
   "version": "1.0.0",
 
+  "description": "Auto page refresher , that's all !",
+
+  "icons": { "16": "Res/icon.png",
+             "48": "Res/icon.png",
+            "128": "Res/icon.png" },
+
   "manifest_version": 2,
 
   "background": {
